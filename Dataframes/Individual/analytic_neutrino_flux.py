@@ -4,7 +4,7 @@ from astropy import units as u
 from astropy import constants as const
 from scipy.integrate import quad
 
-
+# Functions needed to compute Proton injection rate Qp in Eq. (7)
 def cross_section(E):
     L = np.log(E/1e3)
     E_th = 1.22
@@ -36,12 +36,13 @@ def Qp(p,R,h,plow,pup,alpha,pmax,RSN):
     else:
         V_disk = 2*h_cm*np.pi*pow(R_cm,2)
         V_SBN = V_disk
+        
     mom = np.logspace(np.log10(plow),np.log10(pup),100000)
     Int = np.trapz(I(mom,alpha,pmax),mom)
     N = E_CR(RSN)/Int
     return (N/V_SBN)*pow(p/mp,-alpha)*np.exp(-p/pmax)
 
-
+# Functions needed to compute total lifetime tau in Eq. (11)
 def loss_time(p,nism): 
     E = np.sqrt(pow(p,2)+pow(0.938,2))
     eta = 0.5
@@ -50,6 +51,7 @@ def loss_time(p,nism):
     sigma = cross_section(E)*1e-31 #1e-31 converts mb -> m2
     return 1/(eta*n_m*sigma*const.c.value)
 
+## Eq. (15)
 def tau_wind(R,v,h):
     if h==0:
         R_pc = R*u.parsec 
@@ -62,6 +64,7 @@ def tau_wind(R,v,h):
         v_wind = v*1000 
         return (h_m/v_wind) 
             
+## Eq. (12)
 def larmor(p,B): #Larmor radius in m 
     E = np.sqrt(pow(p,2)+pow(0.938,2))
     B_G = (B*u.G)*1e-6 #Gauss
@@ -91,19 +94,22 @@ def D(E,k_0,B,d):
     
     return D_pc2_s # in pc^2/s
 
+
 def tau_diff_quasi(p,R):
     #! B = 250 muG hardcoded
     return pow(R,2)/D(p,1,250,5/3) # untit: seconds
 
+## Eq. (11)
 def tau_lifetime(R,vwind,p , nism,h):
     return pow(pow(tau_wind(R,vwind,h),-1)+pow(loss_time(p,nism),-1) +pow(tau_diff_quasi(p,R),-1),-1)
 
 
+# Proton momentum distribution function in Eq. (18)
 def f_p(p,R,v,nism,h,plow,pup,alpha,pmax,RSN):
     return tau_lifetime(R,v,p, nism,h)*Qp(p,R,h,plow,pup,alpha,pmax,RSN)
 
 
-
+# Neutrino distribution functions in Eq. (20)
 def Fmu1(x,Ep):
     if x <= 0.427:
         L= np.log(Ep/1e3)
@@ -119,8 +125,6 @@ def Fmu1(x,Ep):
 
 
 Fmu1_vec = np.vectorize(Fmu1)
-xx = np.arange(1e-4,0.999,1e-4)
-
 
 
 def Fe(x,Ep):
@@ -138,7 +142,7 @@ def Ftot(x,Ep):
     return 2*Fe(x,Ep)+Fmu1(x,Ep)
 Ftot = np.vectorize(Ftot)
 
-
+# Neutrino luminosity at the source in Eq. (20)
 def q(E_nu,R,v,nism,H,gammasn,pmax,RSN):
     x = np.logspace(np.log10(0.0001),np.log10(1),1000)
     c= 3e8*100 #cm/s
@@ -147,10 +151,9 @@ def q(E_nu,R,v,nism,H,gammasn,pmax,RSN):
     return c*nism*I #GeV-1 cm-3 s-1
 
 
-
 q = np.vectorize(q)
 
-
+# Eq. (21) scaled with energy squared
 def Flux(E_nu,R,v,nism,H,gammasn,pmax,RSN,D_L):
     DL_pc = (D_L*1e6)*u.parsec #pc
     DL_cm = (DL_pc.to(u.cm)).value #cm
