@@ -178,7 +178,7 @@ def nu_flux(E, eta_tot, xiz, alpha, QIR, fpp, Emin, Emax):
     - Emax (float): Maximum proton energy [GeV]
 
     Returns:
-    - nu_flux (float): All-flavor neutrino flux at energy E [TeV / (cm² s sr)]
+    - nu_flux (float): All-flavor neutrino flux at energy E [TeV cm-2 s-1 sr-1]
     """
 
     # Compute Rp — normalization factor for the proton injection spectrum
