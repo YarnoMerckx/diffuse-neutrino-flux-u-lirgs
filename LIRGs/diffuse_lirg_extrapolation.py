@@ -39,14 +39,14 @@ def complete_dataframe(DL_compl, df):
 
     Returns:
     - Filtered DataFrame containing only galaxies that:
-        * have D_L < DL_compl
+        * have D_L <= DL_compl
         * have log(LIR) < 12 (i.e., are LIRGs and not ULIRGs)
     """
 
     # Apply both filters:
     # 1. Galaxy distance must be less than the completeness distance
     # 2. Galaxy must be a LIRG (log(LIR) < 12)
-    mask = (df['D_L [Mpc]'] < DL_compl) & (df['log(LIR)'] < 12)
+    mask = (df['D_L [Mpc]'] <= DL_compl) & (df['log(LIR)'] < 12)
 
     # Return the filtered DataFrame
     return df[mask]
@@ -111,7 +111,7 @@ def generation_rate_diff(DL_compl, E, Emin, Emax, alpha, eta, agncorr,df):
     
 def nuflux(E, Emin, Emax, alpha, DL_compl, xiz, eta, fpp, channel, agncorr,df):
     """
-    Computes the diffuse neutrino flux (per flavor) from starburst galaxies.
+    Computes the diffuse neutrino flux (per flavor) from the LIRG population.
 
     Parameters:
     - E (float): Neutrino energy at which to evaluate the flux [GeV].
