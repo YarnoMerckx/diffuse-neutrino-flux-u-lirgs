@@ -11,7 +11,7 @@ import astropy.constants as const
 
 def Rp(E, Emin, Emax, s):
     """
-    Calculates the energy normalization factor Rp for a power-law spectrum for plotting purposes.
+    Calculates the energy normalization factor Rp for a power-law spectrum.
 
     Parameters:
     - E (float): Energy at which the rate is evaluated.
@@ -48,7 +48,7 @@ def nuflux_fit(E, eta, alpha, xi, fpp):
     
     def generation_rate_diff_fit(E, alpha, eta):
         """
-        Internal helper function to compute Q(E) assuming Eν = ECR / 20.
+        Internal helper function to compute Q(E) assuming E?? = ECR / 20.
         Uses a fixed total IR luminosity for DL_compl = 75 Mpc.
         """
         Emin = E[0] * 20
@@ -76,7 +76,7 @@ def nuflux_fit(E, eta, alpha, xi, fpp):
         * u.erg / (u.Mpc**3 * u.yr)
     ).to(u.GeV / (u.cm**3 * u.s)).value
 
-    # Kpi = 0.5 for pp → π± channel (1/3 flavor factor assumed)
+    # Kpi = 0.5 for pp ??? ???? channel (1/3 flavor factor assumed)
     return (1 / 3) * ((ctH * xi) / (4 * np.pi)) * 0.5 * fpp * generation_rate
 
 
@@ -94,7 +94,7 @@ def fit_eta_vs_fpp(
     Parameters:
     - nuflux_model (function): callable like `nuflux_fit(E, eta, alpha, fpp, xi)`
     - energy_array (array): Energy values [GeV]
-    - flux_array (array): Measured flux × E² (to fit to)
+    - flux_array (array): Measured flux ?? E?? (to fit to)
     - fpp_range (array): Values of proton-to-pion conversion efficiency to test.
     - xi (float): Redshift evolution factor (xi_z)
     - alpha_fixed (float): Fixed spectral index alpha
@@ -102,7 +102,7 @@ def fit_eta_vs_fpp(
 
     Returns:
     - fpp_vals (array): Array of fpp values used
-    - eta_fit (array): Best-fit η values for each fpp
+    - eta_fit (array): Best-fit ?? values for each fpp
     """
 
     eta_fit = []
