@@ -1,3 +1,3 @@
-# Diffuse-LIRG-Emission
+# Diffuse High-Energy Neutrino emission from LIRGs and ULIRGs
 
-The Analytic_neutrino_flux file is used in the Dataframe_GOALS to compute the neutirno flux per source. The Dataframe_GOALS file is then used in the Extrapolation file to compute the local IR generation rate. Moreover, the xi file is also used in the Extrapolation file to compute the redshift evolution parameter. 
+The `LIRG` and `ULIRG` folders contain the source information and relevant scripts to estimate the diffuse starburst-driven high-energy neutrino flux from the LIRG and ULIRG populations respectively. 
